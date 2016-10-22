@@ -14,7 +14,13 @@ public class PlayerController : MonoBehaviour {
 	public Boundary boundary;
 
 	public Camera camera;
-	
+
+    [Header("audio source")]
+    public AudioSource ExplosionSound;
+    
+    //play explosion
+    public Transform explosion;
+
 	// PRIVATE INSTANCE VARIABLES
 	private Vector2 _newPosition = new Vector2(0.0f, 0.0f);
     private GameObject _gControllerObject;
@@ -33,7 +39,8 @@ public class PlayerController : MonoBehaviour {
 
         this._gControllerObject = GameObject.Find("GameController");
         this._gController = this._gControllerObject.GetComponent<GameController>() as GameController;
-
+        this._gController.Lives = 5;
+        this._gController.Score = 0;
     }
     private void _CheckInput() {
 		this._newPosition = gameObject.GetComponent<Transform> ().position; // current position
@@ -67,12 +74,23 @@ public class PlayerController : MonoBehaviour {
 			this._newPosition.x = this.boundary.xMax;
 		}
 	}
-    private void OnCollisionEnter2D (Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag.Contains("Enemy"))
         {
             this._gController.Lives -= 1;
+            this.ExplosionSound.Play();
+            if (explosion)
+            {
+                Debug.Log("exploding");
+                GameObject exploder = ((Transform)Instantiate(explosion, this.transform.position, this.transform.rotation)).gameObject;
+                //exploder.GetComponent<Renderer>().
+                exploder.GetComponent<Renderer>().sortingLayerName = "Default";
+
+                Destroy(exploder, 2.0f);
+            }
             Debug.Log("Ship hit Lives left: " + this._gController.Lives);
+            this._newPosition = gameObject.GetComponent<Transform>().position;
         }
     }
 }

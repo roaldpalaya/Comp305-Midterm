@@ -18,6 +18,9 @@ public class GameController : MonoBehaviour {
 	public GameObject enemy;
     public Text LivesLbl;
     public Text ScoreLbl;
+
+    public AudioSource EndSound;
+
     public int Lives
     {
         get
@@ -29,6 +32,7 @@ public class GameController : MonoBehaviour {
             this._lives = value;
             if (this._lives <= 0)
             {
+                EndSound.Play();
                 this._endGame();
 
             }

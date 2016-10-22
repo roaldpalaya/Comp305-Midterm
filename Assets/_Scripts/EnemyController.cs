@@ -24,6 +24,9 @@ public class EnemyController : MonoBehaviour {
 	public Speed speed;
 	public Boundary boundary;
 
+
+    [Header("audio source")]
+    public AudioSource Explosion;
 	// PRIVATE INSTANCE VARIABLES
 	private float _CurrentSpeed;
 	private float _CurrentDrift;
@@ -37,16 +40,17 @@ public class EnemyController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
 		Vector2 currentPosition = gameObject.GetComponent<Transform> ().position;
 		currentPosition.y -= this._CurrentSpeed;
 		gameObject.GetComponent<Transform> ().position = currentPosition;
 		
 		// Check bottom boundary
 		if (currentPosition.y <= boundary.yMin) {
-			this._Reset();
+            this._Score();
+            this._Reset();
 		}
-        this._Score();
+        
 	}
     //init
     private void _init()
@@ -83,8 +87,10 @@ public class EnemyController : MonoBehaviour {
         if (other.gameObject.tag.Contains("Player"))
         {
             Debug.Log("Resetting enemy");
+            this.Explosion.Play();
             this._Reset();
-            this._gController.Lives -= 1;
+
+            
         }
     }
 

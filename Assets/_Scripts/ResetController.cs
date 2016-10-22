@@ -7,13 +7,50 @@
 
 using UnityEngine;
 
-
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 public class ResetController : MonoBehaviour {
+    private int _score;
+    private int _Hscore;
 
-	// Use this for initialization
-	void Start () {
+    public Text ScoreLbl;
+    public Text HscoreLbl;
+    public int hScore
+    {
+        get
+        {
+            return this._Hscore;
+        }
+        set
+        {
+            this._Hscore = value;
+            if (this._Hscore <= 0)
+            {
+                //this._endGame();
+
+            }
+            else
+            {
+                this._Hscore = value;
+                this.HscoreLbl.text = "Lives: " + this._Hscore;
+            }
+        }
+    }
+    public int Score
+    {
+        get
+        {
+            return this._score;
+        }
+        set
+        {
+            this._score = value;
+            this.ScoreLbl.text = "Score: " + this._score;
+        }
+    }
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
